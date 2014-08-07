@@ -1,0 +1,51 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>Login to sanctum</title>
+<meta name="Robots" content="none" />
+<style>
+html{zoom:expression(function(ele){ele.style.zoom="1";document.execCommand("BackgroundImageCache",false,true);}(this));}
+* { font: 12px Verdana; }
+body { margin: 0; background: #464646; }
+img { border: 0; }
+form { margin: 0; }
+p { margin: 10px 0; }
+input#loginame, input#loginpwd { width: 150px; font-weight: bold; border: 1px solid #000; padding: 4px; background: url(images/login_input_bg.gif) left top no-repeat; }
+input#vc { width: 45px; font-weight: 700; border: 1px solid #000; padding: 4px; background: url(images/login_input_bg.gif) left top no-repeat; }
+#login { height: 350px; width: 700px; margin: 80px auto; }
+    #logo { float: left; width: 300px; }
+    #right { color: #fff; float: right; width: 370px; margin: 110px 0 0 0; }
+        .login { border: 1px solid #FFFDEE; border-right: 1px solid #FDB939; border-bottom: 1px solid #FDB939; background: #FFF8C5; +padding: 3px 2px 0; }
+        .wid { margin-left: 46px; }
+        #right img { vertical-align: top; margin-top: 3px; cursor: pointer; }
+</style>
+</head>
+
+<body>
+<div id="login">
+    <div id="logo"><img src="images/login.png" alt="管理后台" /></div>
+    <form action="index.html" method="post">
+    <div id="right">
+        <p>　帐号: <input id="loginame" type="text" name="user" onFocus="this.style.borderColor='#F93'" onBlur="this.style.borderColor='#000'" /></p>
+        <p>　密码: <input id="loginpwd" type="password" name="password" onFocus="this.style.borderColor='#F93'" onBlur="this.style.borderColor='#000'" /></p>
+        <!-- <p>验证码: <input name="vdcode" id="vc" type="text" maxlength="4" style="text-transform:uppercase;" onFocus="this.style.borderColor='#F93'" onBlur="this.style.borderColor='#000'" /> <img src="include/vdcode.php" id="ic" onClick="changecode();" alt="点击更换验证码" /></p> -->
+        <span class="wid"></span>
+        <input type="submit" name="submit" value="登陆" class="login" />
+    </div>
+    </form>
+</div>
+
+<script>
+window.onload = function (){
+    loginame = document.getElementById("loginame");
+    loginame.focus();
+}
+
+function changecode(){
+    document.getElementById('ic').setAttribute('src', 'include/vdcode.php?&amp;ran='+Math.random());
+    document.getElementById('vc').focus();
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,169 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>admin control panel</title>
+<meta name="Robots" content="none" />
+<link rel="stylesheet" href="css/global.css" />
+<script src="js/jquery.js"></script>
+<script src="js/global.js"></script>
+</head>
+
+<body>
+<div id="header">
+    <div id="logo"><img src="images/adminLogo.gif" alt="" /></div>
+    <div id="header_right">
+        <ul id="nav">
+            <li id="menu1" class="nav">首页</li>
+            <li id="menu2" class="nav nav_current">栏目</li>
+            <li id="menu3" class="nav">文章</li>
+            <li id="menu4" class="nav">评论</li>
+            <li class="nav">会员</li>
+            <li class="nav">广告</li>
+            <li class="nav">帐号</li>
+            <li class="nav">系统</li>
+        </ul>
+        <div id="status">
+            <span>您好, <strong>阿辛</strong> [<a href="">退出</a>] [<a href="">网站首页</a>]</span>
+            首页 » 栏目 » 管理栏目
+        </div>
+    </div>
+</div>
+
+<div id="left">
+    <ul id="s_menu1" class="menu" style="display:block">
+        <li><a href="admincp.php?action=article&amp;do=manage" class="selected">管理文章1</a></li>
+        <li><a href="admincp.php?action=article&amp;do=moderate">审核文章</a></li>
+        <li><a href="admincp.php?action=article&amp;do=add">添加文章</a></li>
+        <li><a href="admincp.php?action=article&amp;do=slide">管理幻灯</a></li>
+    </ul>
+    <ul id="s_menu2" class="menu">
+        <li><a href="admincp.php?action=article&amp;do=manage" class="selected">管理文章2</a></li>
+        <li><a href="admincp.php?action=article&amp;do=moderate">审核文章</a></li>
+        <li><a href="admincp.php?action=article&amp;do=add">添加文章</a></li>
+        <li><a href="admincp.php?action=article&amp;do=slide">管理幻灯</a></li>
+    </ul>
+    <ul id="s_menu3" class="menu">
+        <li><a href="admincp.php?action=article&amp;do=manage" class="selected">管理文章3</a></li>
+        <li><a href="admincp.php?action=article&amp;do=moderate">审核文章</a></li>
+        <li><a href="admincp.php?action=article&amp;do=add">添加文章</a></li>
+        <li><a href="admincp.php?action=article&amp;do=slide">管理幻灯</a></li>
+    </ul>
+</div>
+
+<div id="right">
+
+	<table style="width:100%" class="TR_MOUSEOVER TR_SELECTED TOGGLE TR_EVEN">
+	    <caption>这里是表格标题(点击标题可以收缩表格、点击行能高亮，可选功能)</caption>
+	    <thead>
+	        <tr>
+	            <th>表头1</th>
+	            <th>表头2</th>
+	            <th>表头3</th>
+	            <th>表头4</th>
+	        </tr>
+	    </thead>
+	    
+	    <tfoot>
+	        <tr><th colspan="4">这里是表尾</th></tr>
+	    </tfoot>
+	    
+	    <tbody>
+	        <tr>
+	            <td>内容</td>
+	            <td>内容</td>
+	            <td>内容</td>
+	            <td>内容</td>
+	        </tr>
+	        <tr>
+	            <td>内容</td>
+	            <td>内容</td>
+	            <td>内容</td>
+	            <td>内容</td>
+	        </tr>
+	        <tr>
+	            <td>内容</td>
+	            <td>内容</td>
+	            <td>内容</td>
+	            <td>内容</td>
+	        </tr>
+	    </tbody>
+	</table>
+	
+	<table style="width:100%" class="TR_MOUSEOVER TD_SELECTED">
+	    <caption>这个表不带收缩，非行选择，而是单元格选择</caption>
+	    <thead>
+	        <tr>
+	            <th>表头1</th>
+	            <th>表头2</th>
+	            <th>表头3</th>
+	            <th>表头4</th>
+	        </tr>
+	    </thead>
+	    
+	    <tfoot>
+	        <tr><th colspan="4" class="red">这里是表尾</th></tr>
+	    </tfoot>
+	    
+	    <tbody>
+	        <tr>
+	            <td>内容</td>
+	            <td>内容</td>
+	            <td>内容</td>
+	            <td>内容</td>
+	        </tr>
+	        <tr>
+	            <td>内容</td>
+	            <td>内容</td>
+	            <td>内容</td>
+	            <td>内容</td>
+	        </tr>
+	        <tr>
+	            <td>内容</td>
+	            <td>内容</td>
+	            <td>内容</td>
+	            <td>内容</td>
+	        </tr>
+	    </tbody>
+	</table>
+	
+	<table class="TR_EVEN">
+	    <tr>
+	        <td style="width:40px">内容</td>
+	        <td>内容</td>
+	        <td>内容</td>
+	    </tr>
+	    <tr>
+	        <td>内容</td>
+	        <td>内容</td>
+	        <td>内容</td>
+	    </tr>
+	    <tr>
+	        <td>内容</td>
+	        <td>内容</td>
+	        <td>内容</td>
+	    </tr>
+	</table>
+	
+	<input type="text" size="18" value="默认样式" />
+	<textarea>默认样式</textarea>
+	<input type="text" size="38" class="nostyle" value="不需要样式只要设置class=&quot;nostyle&quot;" /> 
+	<input type="submit" class="beautyButton" value="Submit" />
+	<input type="button"  value="按钮" />
+	<input type="radio" />
+	<input type="checkbox" />
+	
+	<h3>DIV样式(普通非表格形式)</h3>
+	<div class="NORMALBOX" style="width:500px;">
+	    <div class="TITLE TOGGLE">普通标题带收缩功能</div>
+	    <div class="CONTENT">内容</div>
+	</div>
+	
+	<div class="NORMALBOX" style="width:500px;">
+	    <div class="TITLE">普通标题<span class="red">不</span>带收缩功能</div>
+	    <div class="CONTENT">内容</div>
+	</div>
+
+</div>
+</body>
+</html>
