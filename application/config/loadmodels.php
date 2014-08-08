@@ -5,4 +5,5 @@ $config['loadmodels'] = array(
 	'config',
 	'page',
 	'users',
+	'groups',
 );

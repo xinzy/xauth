@@ -15,14 +15,14 @@ class Auth extends MY_Controller
 	{
 		parent::__construct();
 
-		$this->load->config('ionauth', true);
-		$this->min_password_length = $this->config->item('min_password_length', 'ionauth');
-		$this->max_password_length = $this->config->item('max_password_length', 'ionauth');
-		$this->min_username_length = $this->config->item('min_username_length', 'ionauth');
-		$this->max_username_length = $this->config->item('max_username_length', 'ionauth');
+		$this->load->config('xauth', true);
+		$this->min_password_length = $this->config->item('min_password_length', 'xauth');
+		$this->max_password_length = $this->config->item('max_password_length', 'xauth');
+		$this->min_username_length = $this->config->item('min_username_length', 'xauth');
+		$this->max_username_length = $this->config->item('max_username_length', 'xauth');
 		
-		$this->identityField = $this->config->item('identity', 'ionauth');
-		$this->email_activation = $this->config->item('email_activation', 'ionauth');
+		$this->identityField = $this->config->item('identity', 'xauth');
+		$this->email_activation = $this->config->item('email_activation', 'xauth');
 		
 		header('Content-type: text/html; charset=utf-8');
 	}
@@ -55,7 +55,7 @@ class Auth extends MY_Controller
 			$password = set_value('password');
 			$remember = P('remember');
 			
-			$res = $this->ionauth->login($identity, $password, $remember);
+			$res = $this->xauth->login($identity, $password, $remember);
 			if ($res === true)
 			{
 				echo '登陆成功';
@@ -93,7 +93,7 @@ class Auth extends MY_Controller
 			$password = set_value('password');
 			$groupid = set_value('groupid');
 			
-			$uid = $this->ionauth->register($email, $username, $password, $groupid);
+			$uid = $this->xauth->register($email, $username, $password, $groupid);
 			if ($uid > 0)
 			{
 				if ($this->email_activation)
@@ -109,13 +109,14 @@ class Auth extends MY_Controller
 			}
 		} else 
 		{
-			$this->load->view('www/auth/register');
+			$tp['groups'] = $this->groupsmod->lists_all();
+			$this->load->view('www/auth/register', $tp);
 		}
 	}
 	
 	function logout()
 	{
-		$this->ionauth->logout();
+		$this->xauth->logout();
 		redirect();
 	}
 	
@@ -135,10 +136,10 @@ class Auth extends MY_Controller
 			$password = set_value('password');
 			$newpasswd = set_value('newpasswd');
 			
-			$ret = $this->ionauth->change_password($password, $newpasswd);
+			$ret = $this->xauth->change_password($password, $newpasswd);
 			if ($ret)
 			{
-				$this->ionauth->logout();
+				$this->xauth->logout();
 				echo '修改成功，请重新登录';
 				redirect();
 			} else 
@@ -162,7 +163,7 @@ class Auth extends MY_Controller
 		{
 			$email = set_value('email');
 			
-			$ret = $this->ionauth->forget_password($email);
+			$ret = $this->xauth->forget_password($email);
 			if ($ret)
 			{
 				echo '申请成功，请登录邮箱激活';
@@ -186,7 +187,7 @@ class Auth extends MY_Controller
 		if (V())
 		{
 			$password = set_value('password');
-			$ret = $this->ionauth->reset_password($uid, $code, $password);
+			$ret = $this->xauth->reset_password($uid, $code, $password);
 			
 			if ($ret === false)
 			{
@@ -208,7 +209,7 @@ class Auth extends MY_Controller
 		$uid = U(3);
 		$code = U(4);
 		
-		$ret = $this->ionauth->active($uid, $code);
+		$ret = $this->xauth->active($uid, $code);
 		if ($ret)
 		{
 			echo '激活成功';

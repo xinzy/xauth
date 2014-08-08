@@ -48,7 +48,7 @@ class MY_Controller extends CI_Controller
 		if ($this->isadmin())
 		{
 			$this->template['isadmin'] = 1;
-			$this->template['curuser'] = $this->admin;
+			$this->template['admin'] = $this->admin;
 		}
 	}
 	
@@ -78,7 +78,7 @@ class MY_Controller extends CI_Controller
 	
 	protected function islogin()
 	{
-		return $this->ionauth->logged_in();
+		return $this->xauth->logged_in();
 	}
 	
 	protected function isadmin()
@@ -88,13 +88,12 @@ class MY_Controller extends CI_Controller
 	
 	protected function getuserid()
 	{
-		return $this->ionauth->get_user_id();
+		return $this->xauth->get_user_id();
 	}
 	
 	protected function getuser()
 	{
-		$user = $this->islogin() ? $this->ion_auth->get_user() : NULL;
-		return is_null($user) ? NULL : $user[0];
+		return $this->xauth->get_user();
 	}
 	
 	protected function settitle($title)
@@ -120,7 +119,7 @@ class MY_Controller extends CI_Controller
 		$this->template['type'] = $type;
 		$this->template['messages'] = $messages;
 
-		$html = $this->load->view('www/alert-message', $this->template, TRUE);
+		$html = $this->load->view('www/messages', $this->template, TRUE);
 		echo $html;
 		exit();
 	}

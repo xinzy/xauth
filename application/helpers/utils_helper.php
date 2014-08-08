@@ -1,6 +1,68 @@
 <?php
 
+if (! function_exists('strlen_utf8'))
+{
+	function strlength($str)
+	{
+		$i = 0;
+		$count = 0;
+		$len = strlen ($str);
+		while ($i < $len)
+		{
+			$chr = ord ($str[$i]);
+			$count++;
+			$i++;
+			if($i >= $len)
+				break;
 
+			if($chr & 0x80)
+			{
+				$chr <<= 1;
+				while ($chr & 0x80)
+				{
+					$i++;
+					$chr <<= 1;
+				}
+			}
+		}
+		return $count;
+	}
+}
+
+if (! function_exists('cutstr'))
+{
+	function cutstr($str, $length, $dot = '...', $charset = "utf-8")
+	{
+		$str = trim($str); //清除字符串两边的空格
+		$str = strip_tags($str, ""); //利用php自带的函数清除html格式
+		$str = preg_replace("/\t/", "", $str); //使用正则表达式匹配需要替换的内容，如：空格，换行，并将替换为空。
+		$str = preg_replace("/\r\n/", "", $str);
+		$str = preg_replace("/\r/", "", $str);
+		$str = preg_replace("/\n/", "", $str);
+		$str = preg_replace("/ /", "", $str);
+		$str = preg_replace("/&nbsp; /", "", $str); //匹配html中的空格
+		$str = trim($str); //清除字符串两边的空格
+
+		$strlen = strlength($str);
+		if ($strlen < $length)
+		{
+			return $str;
+		}
+
+		if (function_exists("mb_substr"))
+		{
+			$substr = mb_substr($str, 0, $length, $charset);
+		} else
+		{
+			$c['utf-8'] = "/[\x01-\x7f]|[\xc2-\xdf][\x80-\xbf]|[\xe0-\xef][\x80-\xbf]{2}|[\xf0-\xff][\x80-\xbf]{3}/";
+			$c['gbk'] = "/[\x01-\x7f]|[\x81-\xfe][\x40-\xfe]/";
+			preg_match_all($c[$charset], $str, $match);
+			$substr = join("", array_slice($match[0], 0, $length));
+		}
+
+		return $substr . $dot;
+	}
+}
 
 if (! function_exists('address'))
 {
@@ -142,6 +204,9 @@ if (! function_exists('ipresolve'))
 
 if (! function_exists('cecho'))
 {
+	/**
+	 * 检查数组是否有指定的key并输出
+	 */
 	function cecho($arr, $key, $default = '')
 	{
 		if (array_key_exists($key, $arr))

@@ -7,7 +7,7 @@
     <ul id="s_menu1" class="menu" style="<?php if($fs == '' || $fs == 'index'){echo 'display:block';}?>">
         <li><a href="/admin/index" class="<?php if ($fs == '' || ($fs == 'index' && ($ss == '' || $ss == 'index'))) {echo 'selected';} ?>">首页</a></li>
         <li><a href="/admin/index/modifypass" class="<?php if ($fs == 'index' && $ss == 'modifypass') {echo 'selected';} ?>">修改密码</a></li>
-        <?php if ($curuser['admintype'] == 'A'): ?>
+        <?php if ($admin['admintype'] == 'A'): ?>
         <li><a href="/admin/index/admins" class="<?php if ($fs == 'index' && $ss == 'admins') {echo 'selected';} ?>">管理员列表</a></li>
         <li><a href="/admin/index/addadmin" class="<?php if ($fs == 'index' && $ss == 'addadmin') {echo 'selected';} ?>">添加管理员</a></li>
         <?php endif; ?>

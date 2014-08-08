@@ -1,6 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-define('TABLE_PRE', 'fs_');
+define('TABLE_PRE', 'x_');
 
 class MY_Model extends CI_Model {
 
@@ -14,7 +14,6 @@ class MY_Model extends CI_Model {
 
 	public function __construct() {
 		parent::__construct();
-		log_message('debug','MY_Model class loaded');
 	}
 
 	public function set_table($table) {

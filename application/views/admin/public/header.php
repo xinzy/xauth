@@ -27,7 +27,7 @@
         </ul>
 
         <div id="status">
-            <span>您好, <strong><?php echo $curuser['username']; ?></strong> [<a href="<?php echo $base_url;?>admin/logging/logout">退出</a>] [<a target="_blank" href="<?php echo $base_url;?>">网站首页</a>]</span>
+            <span>您好, <strong><?php echo $admin['username']; ?></strong> [<a href="<?php echo $base_url;?>admin/logging/logout">退出</a>] [<a target="_blank" href="<?php echo $base_url;?>">网站首页</a>]</span>
             首页 » 
         </div>
     </div>

@@ -1,6 +1,6 @@
 <?php
 
-class Ionauth
+class Xauth
 {
 	private $CI;
 	
@@ -29,28 +29,28 @@ class Ionauth
 	{
 		$this->CI =& get_instance();
 
-		$this->load->config('ionauth', TRUE);
-		$this->store_salt = $this->config->item('store_salt', 'ionauth');
-		$this->salt_length = $this->config->item('salt_length', 'ionauth');
+		CFG('xauth', TRUE);
+		$this->store_salt = CFG('*store_salt', 'xauth');
+		$this->salt_length = CFG('*salt_length', 'xauth');
 		
-		$this->hash_method = $this->config->item('hash_method', 'ionauth');
-		$this->default_rounds = $this->config->item('default_rounds', 'ionauth');
-		$this->random_rounds = $this->config->item('random_rounds', 'ionauth');
-		$this->min_rounds = $this->config->item('min_rounds', 'ionauth');
-		$this->max_rounds = $this->config->item('max_rounds', 'ionauth');
+		$this->hash_method = CFG('*hash_method', 'xauth');
+		$this->default_rounds = CFG('*default_rounds', 'xauth');
+		$this->random_rounds = CFG('*random_rounds', 'xauth');
+		$this->min_rounds = CFG('*min_rounds', 'xauth');
+		$this->max_rounds = CFG('*max_rounds', 'xauth');
 		
-		$this->identity_field = $this->config->item('identity', 'ionauth');
-		$this->email_activation = $this->config->item('email_activation', 'ionauth');
+		$this->identity_field = CFG('*identity', 'xauth');
+		$this->email_activation = CFG('*email_activation', 'xauth');
 		
-		$this->lockout_time = $this->config->item('lockout_time', 'ionauth');
-		$this->maximum_login_attempts = $this->config->item('maximum_login_attempts', 'ionauth');
-		$this->track_login_ip_address = $this->config->item('track_login_ip_address', 'ionauth');
-		$this->track_login_attempts = $this->config->item('track_login_ip_address', 'ionauth');
+		$this->lockout_time = CFG('*lockout_time', 'xauth');
+		$this->maximum_login_attempts = CFG('*maximum_login_attempts', 'xauth');
+		$this->track_login_ip_address = CFG('*track_login_ip_address', 'xauth');
+		$this->track_login_attempts = CFG('*track_login_ip_address', 'xauth');
 		
-		$this->identity_cookie_name = $this->config->item('identity_cookie_name', 'ionauth');
-		$this->remember_cookie_name = $this->config->item('remember_cookie_name', 'ionauth');
+		$this->identity_cookie_name = CFG('*identity_cookie_name', 'xauth');
+		$this->remember_cookie_name = CFG('*remember_cookie_name', 'xauth');
 		
-		$this->remember_cookie_name = $this->config->item('forgot_password_expiration', 'ionauth');
+		$this->forgot_password_expiration = CFG('*forgot_password_expiration', 'xauth');
 		
 		if ($this->hash_method == 'bcrypt') 
 		{
@@ -63,7 +63,7 @@ class Ionauth
 				$params = array('rounds' => $this->default_rounds);
 			}
 		
-			$params['salt_prefix'] = $this->config->item('salt_prefix', 'ionauth');
+			$params['salt_prefix'] = CFG('*salt_prefix', 'xauth');
 			$this->load->library('bcrypt',$params);
 		}
 		$this->load->model('loginattempts_model', 'loginattempts');
@@ -108,7 +108,7 @@ class Ionauth
 		$this->set_session($user);
 		$this->update_last_login($user['uid']);
 			
-		if ($this->config->item('remember_users', 'ionauth'))
+		if (CFG('*remember_users', 'xauth'))
 		{
 			$this->remember_me($user);
 		}
@@ -117,6 +117,7 @@ class Ionauth
 	
 	/**
 	 * @return 
+	 * 		TRUE:	成功
 	 * 		FALSE:	登陆名密码错误
 	 * 		1:		账号未激活
 	 * 		2:		超过最大尝试次数
@@ -161,7 +162,7 @@ class Ionauth
 			$this->update_last_login($user['uid']);
 			$this->clear_login_attempts($identity);
 			
-			if ($remember && $this->config->item('remember_users', 'ionauth'))
+			if ($remember && CFG('*remember_users', 'xauth'))
 			{
 				$this->remember_me($user);
 			}
@@ -196,7 +197,7 @@ class Ionauth
 			return false;
 		}
 		
-		$email_activation = $this->config->item('email_activation', 'ionauth');
+		$email_activation = $this->email_activation;
 		$ip = A();
 		$salt = $this->store_salt ? $this->salt() : FALSE;
 		$password = $this->hash_password($password, $salt);
@@ -228,7 +229,7 @@ class Ionauth
 			if ($email_activation)
 			{
 				$title = '邮件激活';
-				$message = $this->config->item('email_activate', 'ionauth');
+				$message = $this->email_activation;
 				$url = base_url('auth/active') . '/' . $uid . '/' . $activecode;
 				$message = str_replace(array('%username%', '%email%', '%url%', '%date%', ), array($username, $email, $url, date('Y-m-d'), ), $message);
 				$this->myemail->send($email, $title, $message);
@@ -296,7 +297,7 @@ class Ionauth
 		
 		$url = base_url('auth/reset_password') . '/' . $user['uid'] . '/' . $code;
 		$title = '重置密码';
-		$message = $this->config->item('email_forgot_password', 'ionauth');
+		$message = CFG('*email_forgot_password', 'xauth');
 		$message = str_replace(array('%email%', '%url%', '%date%', ), array($email, $url, date('Y-m-d'), ), $message);
 		$this->myemail->send($email, $title, $message);
 		
@@ -534,7 +535,7 @@ class Ionauth
 		$salt = $this->salt();
 		if ($this->usersmod->commit(array('uid' => $user['uid'], 'remember_code' => $salt)))
 		{
-			$user_expire = $this->config->item('user_expire', 'ionauth');
+			$user_expire = CFG('*user_expire', 'xauth');
 			
 			$identityFiled = explode('|', $this->identity_field);
 			if (in_array('email', $identityFiled))
@@ -544,8 +545,10 @@ class Ionauth
 			{
 				$identity = $user['username'];
 			}
+			
 			C($this->identity_cookie_name, $identity, $user_expire);
 			C($this->remember_cookie_name, $salt, $user_expire);
+			
 			return true;
 		}
 		return false;
@@ -567,6 +570,26 @@ class Ionauth
 		$user_id = $this->session->userdata('user_id');
 		
 		return empty($user_id) ? NULL : $user_id;
+	}
+	
+	function get_groupid()
+	{
+		$user = $this->get_user();
+		if (empty($user))
+		{
+			return false;
+		}
+		return $user['groupid'];
+	}
+	
+	function get_group()
+	{
+		$groupid = $this->get_groupid();
+		if (empty($groupid))
+		{
+			return false;
+		}
+		return $this->groupsmod->fetchone($groupid);
 	}
 	
 	public function logged_in()
