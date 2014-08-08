@@ -22,6 +22,9 @@
         		$ss = $this->uri->segment(3);
         	?>
             <li id="menu1" class="nav<?php if($fs == '' || $fs == 'index'){echo ' nav_current';}?>" onclick="location.href='<?php echo $base_url . 'admin/index'?>';">首页</li>
+            <?php if (ENABLE_PERMISSION):?>
+            <li id="menu2" class="nav<?php if($fs == 'system'){echo ' nav_current';}?>" onclick="location.href='<?php echo $base_url . 'admin/system'?>';">系统</li>
+            <?php endif;?>
             <li id="menu6" class="nav<?php if($fs == 'settings'){echo ' nav_current';}?>" onclick="location.href='<?php echo $base_url . 'admin/settings'?>';">设置</li>
 
         </ul>

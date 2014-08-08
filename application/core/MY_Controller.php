@@ -125,6 +125,8 @@ class MY_Controller extends CI_Controller
 	}
 }
 
+define('ENABLE_PERMISSION', 1);
+
 class MY_admin extends MY_Controller
 {
 	protected $IS_POST;
@@ -144,6 +146,16 @@ class MY_admin extends MY_Controller
 		$this->pageconf['per_page'] = 30;
 		$this->pageconf['num_links'] = 5;
 		$this->pageconf['uri_segment'] = 4;
+		
+		if (ENABLE_PERMISSION)
+		{
+			$this->load->library('permission');
+			$this->permission->set_groupid($this->admin['groupid']);
+			$this->permissions = $this->permission->get_permissions();
+			$this->permission_arr = $this->permission->get_permission_array();
+			//print_r($this->permission_arr);die;
+			$this->check_permission();
+		}
 	}
 
 	/**
@@ -204,5 +216,42 @@ class MY_admin extends MY_Controller
 		$msg .= $this->load->view('admin/public/footer',$this->template,TRUE);
 		echo $msg;
 		exit;
+	}
+
+	function check_permission()
+	{
+		if ($this->admin['groupid'] == 1)
+		{
+			return true;
+		}
+		
+		$controller = U(2);
+		$action = U(3);
+		! $controller && $controller = 'index';
+		! $action && $action = 'index';
+	
+		if(!$this->_check_permission($controller, $action))
+		{
+			redirect('admin/index/noperm');
+		}
+	}
+	
+	/**
+	 * 检查url权限
+	 */
+	public function _check_permission($c, $a)
+	{
+		if ($c == 'index')
+		{
+			return TRUE;
+		}
+	
+		if(in_array($a.'@'.$c, $this->permissions))
+		{
+			return TRUE;
+		} else
+		{
+			return FALSE;
+		}
 	}
 }

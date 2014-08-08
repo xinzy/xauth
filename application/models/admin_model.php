@@ -9,6 +9,7 @@ class Admin_model extends MY_Model
 		
 		$this->set_table('admin');
 		$this->pk_name = 'uid';
+		$this->grouptable = TABLE_PRE . 'admingroup';
 	}
 	
 	function find_by_username($username)
@@ -55,5 +56,32 @@ class Admin_model extends MY_Model
 		
 		return parent::lists($sql);
 	}
+
+	function find_by_id($uid)
+	{
+		$sql = "SELECT t.*, g.*
+					FROM {$this->table} t LEFT JOIN {$this->grouptable} g ON t.groupid = g.gid
+					WHERE t.{$this->pk_name} = ?";
 	
+		return parent::get($sql, array($uid));
+	}
+	
+	function lists_user($name = '', $groupid = 0, $page = 0, $limit = 20)
+	{
+		$start = ($page - 1) * $limit;
+		
+		$sql = "SELECT u.*, g.*
+					FROM {$this->table} u LEFT JOIN {$this->grouptable} g ON u.groupid = g.gid
+					WHERE 1 = 1 "
+				. ($groupid == 0 ? '' : " AND u.groupid = '$groupid' ")
+				. ($name == '' ? '' : " AND u.username LIKE '%$name%' ")
+				. " ORDER BY u.{$this->pk_name} DESC " . ($limit == 0 ? '' : " LIMIT $start, $limit");
+			
+		return parent::lists($sql);
+	}
+	
+	function count_user($groupid = 0)
+	{
+		return parent::count_all($groupid == 0 ? '' : " groupid = '$groupid' ");
+	}
 }

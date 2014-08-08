@@ -38,6 +38,11 @@ class Index extends MY_admin
 		}
 	}
 	
+	function noperm()
+	{
+		$this->message('index', '您还没有权限访问该资源');
+	}
+	
 	function admins()
 	{
 		$page = U(4);

@@ -6,4 +6,6 @@ $config['loadmodels'] = array(
 	'page',
 	'users',
 	'groups',
+	'admingroup',
+	'permission',
 );
