@@ -16,11 +16,11 @@ class Index extends MY_admin
 
 	function modifypass()
 	{
-		$this->form_validation->set_rules('password', '密码', 'required');
-		$this->form_validation->set_rules('newpass', '新密码', 'required|min_length[4]|max_length[16]');
-		$this->form_validation->set_rules('confirm', '确认密码', 'required|matches[newpass]|min_length[4]|max_length[16]');
+		V('password', '密码', 'required');
+		V('newpass', '新密码', 'required|min_length[4]|max_length[16]');
+		V('confirm', '确认密码', 'required|matches[newpass]|min_length[4]|max_length[16]');
 		
-		if ($this->form_validation->run() === FALSE)
+		if (V() === FALSE)
 		{
 			$this->output('index/modifypass');
 		} else 
@@ -45,17 +45,42 @@ class Index extends MY_admin
 	
 	function admins()
 	{
-		$page = U(4);
-		intval($page) == 0 && $page = 1;
+		$username = isset($_GET['username']) ? $_GET['username'] : '';
+		$this->template['username'] = $username;
 		
-		$this->pageconf['per_page'] = 1;
-		$this->pageconf['uri_segment'] = 4;
-		$this->pageconf['total_rows'] = $this->adminmod->count_all();
-		$this->pageconf['base_url'] = base_url('admin/index/admins');
-		PG($this->pageconf);
+		$usergroup = $this->admingroupmod->lists_all(0, 0);
+		$temp = array();
+		foreach ($usergroup as $v)
+		{
+			$temp[$v['gid']] = $v;
+		}
+		$usergroup = $temp;
+		unset($temp);
+		$this->template['usergroup'] = $usergroup;
 		
-		$this->template['admins'] = $this->adminmod->lists_all($page, $this->pageconf['per_page']);
-		$this->template['pages'] = PG();
+		$groupid = U(4);
+		if (empty($groupid) || !is_numeric($groupid))
+		{
+			$groupid = 0;
+		}
+		$this->template['currgroupid'] = $groupid;
+		$start = U(5);
+		if (empty($start) || !is_numeric($start))
+		{
+			$start = 1;
+		}
+		
+		if ($username == '')
+		{
+			$this->pageconf['uri_segment'] = 5;
+			$this->pageconf['base_url'] = $this->template['base_url'] . 'admin/system/member/'.$groupid;
+			$this->pageconf['total_rows'] = $this->adminmod->count_user($groupid);
+			PG($this->pageconf);
+			$this->template['pagination'] = PG();
+		}
+		
+		$this->template['users'] = $this->adminmod->lists_user($username, $groupid, $start, $username == '' ? $this->pageconf['per_page'] : 1000);
+		
 		$this->output();
 	}
 	
@@ -64,14 +89,15 @@ class Index extends MY_admin
 		V('username', '登录名', 'required|min_length[4]|max_length[16]|is_unique[admin.username]');
 		V('email', 'Email', 'required|valid_email|is_unique[admin.email]');
 		V('password', '密码', 'required|min_length[6]|max_length[16]');
-		V('admintype', '管理员类型', 'required');
+		V('groupid', '管理员组', 'required|integer');
 		
 		if (V() === true)
 		{
-			$this->userauth->createadmin(set_value('username'), set_value('email'), set_value('password'), set_value('admintype'));
+			$this->userauth->createadmin(set_value('username'), set_value('email'), set_value('password'), set_value('groupid'));
 			$this->message('index/admins', '添加管理员完毕', 'success');
 		} else 
 		{
+			$this->template['usergroup'] = $this->admingroupmod->lists_all(0, 0);
 			$this->output();
 		}
 	}

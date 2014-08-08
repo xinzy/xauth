@@ -29,13 +29,15 @@
 			</td>
 		</tr>
 		<tr>
-			<td class="align_right">管理员类型: </td>
-			<td>
-				<input type="radio"  name="admintype" value="A" checked="checked" />A类　
-				<input type="radio"  name="admintype" value="B" />B类　
-				<input type="radio"  name="admintype" value="C" />C类　
-				<?php echo form_error('admintype'); ?>
-			</td>
+			<td class="align_right">用户组: </td>
+    		<td>
+    			<select name="groupid" >
+    				<option value="0">--请选择--</option>
+    				<?php foreach ($usergroup as $group) : ?>
+    				<option value="<?php echo $group['gid']?>"><?php echo $group['groupname']?></option>
+    				<?php endforeach; ?>
+    			</select>
+    		</td>
 		</tr>
 	</tbody>
 </table>

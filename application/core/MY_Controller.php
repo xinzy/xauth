@@ -125,7 +125,7 @@ class MY_Controller extends CI_Controller
 	}
 }
 
-define('ENABLE_PERMISSION', 1);
+define('ENABLE_PERMISSION', 0);
 
 class MY_admin extends MY_Controller
 {

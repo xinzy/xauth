@@ -138,12 +138,12 @@ class Userauth
 		}
 	}
 	
-	function createadmin($username, $email, $password, $admintype = 'A')
+	function createadmin($username, $email, $password, $groupid = 1)
 	{
 		$admin = array(
 			'username'		=> $username,
 			'email'			=> $email,
-			'admintype'		=> $admintype,
+			'groupid'		=> $groupid,
 			'valid'			=> 1,
 			'regtime'		=> time(),
 		);
